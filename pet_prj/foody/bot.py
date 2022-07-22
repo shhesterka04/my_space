@@ -1,23 +1,24 @@
 import logging
+from os import getenv
+
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-user_data = {'name': "0", 'gener': '1', 'weight': '2',
-             'growth': '3', 'age': '4', 'lifestyle': '5',
-             'frequency': '6', 'water': '7', 'semifinished ': '8',
-             'gadget': '9', 'gender': '10', 'special': '11'}
 
 gender_var = []
 lifestyle = []
 frequency = []
 semifinished = []
 
-BOT_TOKEN = "5545559941:AAEQIdFRC8U-X5Rk2H8MKb9uJnkIXQIK7uI"
-# Объект бота
-bot = Bot(token=BOT_TOKEN)
+
+bot_token = getenv("BOT_TOKEN")
+if not bot_token:
+    exit("Error: no token provided")
+
+bot = Bot(token=bot_token)
 # Диспетчер для бота
 storage = MemoryStorage()
 dp = Dispatcher(bot)
@@ -26,53 +27,31 @@ logging.basicConfig(level=logging.INFO)
 
 
 class UserState(StatesGroup):
-    # name = State()
-    # goal = State()
-    # gender = State()
-    # weight = State()
-    # growth = State()
-    # age = State()
-    # lifestyle = State()
-    # frequency = State()
-    # gadget = State()
-    # special = State()
-
     name = State()
-    address = State()
+    goal = State()
+    gender = State()
+    weight = State()
+    growth = State()
+    age = State()
+    lifestyle = State()
+    frequency = State()
+    gadget = State()
+    special = State()
 
 
 @dp.message_handler(commands="quiz")
 async def quiz(message: types.Message):
     await message.answer("(1/10) Как к вам обращаться?")
     await UserState.name.set()
-
-
-@dp.message_handler(state=UserState.name)
-async def get_username(message: types.Message, state: FSMContext):
-    await state.update_data(username=message.text)
-    await message.answer("Отлично! Теперь введите ваш адрес.")
-    await UserState.next()  # либо же UserState.adress.set()
-
-
-@dp.message_handler(state=UserState.address)
-async def get_address(message: types.Message, state: FSMContext):
-    await state.update_data(address=message.text)
-    data = await state.get_data()
-    await message.answer(f"Имя: {data['username']}\n"
-                         f"Адрес: {data['address']}")
-
-    await state.finish()
-
-    await state.update_data(username=message.text)
-    # await message.answer("(2/10) Какая у вас цель по питанию?")
-    # await message.answer("(3/10) Какой у вас пол?")
-    # await message.answer("(4/10) Сколько вы весите")
-    # await message.answer("(5/10) Какой у вас рост в сантиметрах?")
-    # await message.answer("(6/10) Сколько вам лет?")
-    # await message.answer("(7/10) Какой у вас образ жизни?")
-    # await message.answer("(8/10) Ко скольким приемам пищи вы приквыкли?")
-    # await message.answer("(9/10) Какие инструменты у вас есть?")
-    # await message.answer("(10/10) У вас есть какие-то противопоказния и пожелания?")
+    await message.answer("(2/10) Какая у вас цель по питанию?")
+    await message.answer("(3/10) Какой у вас пол?")
+    await message.answer("(4/10) Сколько вы весите")
+    await message.answer("(5/10) Какой у вас рост в сантиметрах?")
+    await message.answer("(6/10) Сколько вам лет?")
+    await message.answer("(7/10) Какой у вас образ жизни?")
+    await message.answer("(8/10) Ко скольким приемам пищи вы приквыкли?")
+    await message.answer("(9/10) Какие инструменты у вас есть?")
+    await message.answer("(10/10) У вас есть какие-то противопоказния и пожелания?")
 
 
 dp.register_message_handler(quiz, commands="quiz")
