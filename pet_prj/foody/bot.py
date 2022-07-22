@@ -148,7 +148,7 @@ async def get_username(message: types.Message, state: FSMContext):
 async def get_username(message: types.Message, state: FSMContext):
     await state.update_data(gadgets=message.text)
     var = ["Не ем глютен", "Я веган", "Я вегетарианец", "Не ем глюкозу"]
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     for temp in var:
         keyboard.add(temp)
     await message.answer("(10/10) У вас есть какие-то противопоказния и пожелания?", reply_markup=keyboard)
